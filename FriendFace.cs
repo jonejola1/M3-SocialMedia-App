@@ -16,6 +16,8 @@ namespace M3_SocialMedia_App
     {
         public string username = "";
 
+        public string status = "";
+
         static List<string> friendList = new List<string>();
 
 
@@ -112,7 +114,6 @@ namespace M3_SocialMedia_App
             {
                 actionPromt();
             }
-            if (removeFriendInput < friendList.length) { }
 
             friendList.Remove(removeFriendInput);
 
