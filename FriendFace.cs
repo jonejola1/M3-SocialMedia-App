@@ -1,149 +1,101 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using static UserPromt.UserPromts;
 
 namespace M3_SocialMedia_App
 {
     public class FriendFace
     {
-        public string username = "";
-
-        public string status = "";
-
-        static List<string> friendList = new List<string>();
+        static string username = "";
 
 
-        public static char continueCheck { get; set; }
+        public static List<string> friendList = new List<string>();
+
 
         public static void LoginPromt()
         {
-            Console.WriteLine("Enter your name to login to FriendFace.");
-            string username = Console.ReadLine();
-
+            username = AskName("Enter your name to login to FriendFace.");
             Console.WriteLine("Welcome to FriendFace " + username);
 
             actionPromt();
         }
 
-        static void actionPromt()
+        public static void actionPromt()
         {
-            Console.WriteLine("1: Add Friend");
-            Console.WriteLine("2: Remove Friend");
-            Console.WriteLine("3: Show Friend list");
-            Console.WriteLine("4: More Info about friend");
+            var actionPromtInput = PrintAction();
 
-            Console.WriteLine("Input number for action:");
-            int actionPromtUserInput = Convert.ToInt32(Console.ReadLine());
-
-            actionHandler(actionPromtUserInput);
+            ActionHandler(actionPromtInput);
         }
 
-        static void actionHandler(int userInput)
+        static void ActionHandler(string userInput)
         {
             switch (userInput)
             {
-                case 1:
-                    addFriend();
+                case "1":
+                    AddFriend();
                     break;
-                case 2:
-                    removeFriend();
+                case "2":
+                    RemoveFriend();
                     break;
-                case 3:
-                    showFriendList();
+                case "3":
+                    ShowFriendList();
                     break;
-                case 4:
-                    showFriendInfo();
+                case "4":
+                    ShowFriendInfo();
+                    break;
+                case "n":
                     break;
                 default:
+                    Console.WriteLine("invalid input, try again!");
+                    actionPromt();
                     break;
             }
-
         }
 
-        static void addFriend()
+        private static void AddFriend()
         {
-            Console.WriteLine("What is your friend's name? ");
-            string userFriendInput = Console.ReadLine();
+            string userFriendInput = AddFriendPromt();
 
             friendList.Add(userFriendInput);
 
+            string continueCheck = FriendAddedPromt(userFriendInput);
 
-            Console.WriteLine(userFriendInput + " is added in your friend list.");
-            Console.WriteLine();
-            Console.WriteLine("Do you want to find a new friend y/n");
-            var continueCheck = Console.ReadLine();
-
-            if (continueCheck == "y" || continueCheck == "Y")
-            {
-                addFriend();
-            }
+            if (continueCheck == "y" || continueCheck == "Y") AddFriend();
 
             actionPromt();
         }
 
-        static void removeFriend()
+        private static void RemoveFriend()
         {
-            if (friendList.Count == 0) 
+            if (friendList.Count == 0)
             {
                 Console.WriteLine("There are no more people in your friendList to remove");
                 Console.ReadLine();
                 actionPromt();
             }
-            Console.WriteLine("what friend do you want to remove:");
+
+            Console.WriteLine("Who do you want to remove:");
+            var i = 0;
             foreach (var friend in friendList)
             {
-                int i = 0;
                 Console.WriteLine(i + ": " + friend);
                 i++;
             }
 
-            Console.WriteLine("Input the friend you want to remove");
-            Console.WriteLine("n for cancel");
-            var removeFriendInput = Console.ReadLine();
-
-
-            if (removeFriendInput == "n")
-            {
-                actionPromt();
-            }
-
-            friendList.Remove(removeFriendInput);
-
-            Console.WriteLine("Do you want to remove more friends y/n");
-            char continueInput = Convert.ToChar(Console.ReadLine());
-            if (continueInput == 'n' || continueInput == 'N')
-            {
-                actionPromt();
-            }
-
-            removeFriend();
+            RemoveFriendPromt();
         }
-        static void showFriendList()
+        private static void ShowFriendList()
         {
+            var i = 0;
             foreach (var friend in friendList)
             {
-                int i = 0;
                 Console.WriteLine(i + ": " + friend);
                 i += 1;
             }
-            Console.WriteLine("Return to main 'n'");
-            char continueInput = Convert.ToChar(Console.ReadLine());
 
-            if (continueInput == 'n' || continueInput == 'N')
-            {
-                actionPromt();
-            }
+            ShowFriendsPromt();
         }
 
-        static void showFriendInfo()
+        private static void ShowFriendInfo()
         {
             if (friendList.Count == 0)
             {
@@ -152,50 +104,45 @@ namespace M3_SocialMedia_App
                 Console.ReadLine();
                 actionPromt();
             }
-            Console.WriteLine("Which status do you want to inspect?");
 
+            Console.WriteLine("Which person do you want to inspect?");
+
+            var i = 0;
             foreach (var friend in friendList)
             {
-                int i = 0;
                 Console.WriteLine(i + ": " + friend);
                 i++;
-
             }
 
             Console.WriteLine("or go back with 'n'");
 
-            var userInput = Console.ReadLine();
-            if (userInput == "n" || userInput == "N")
-            {
-                actionPromt();
-            }
+            string userInput = Console.ReadLine();
+            if (userInput == "n" || userInput == "N") actionPromt();
 
-            int profileInput = Convert.ToInt32(userInput);
-
-            switch (profileInput)
+            switch (userInput)
             {
-                case 0:
+                case "0":
                     Console.WriteLine(friendList[0] + ": lover of sports and like to take a beer in the pub when im feeling for it.");
-                    goBack();
+                    GoBack();
                     break;
-                case 1:
+                case "1":
                     Console.WriteLine(friendList[1] + ": You will see the fragments when i explode");
-                    goBack();
+                    GoBack();
                     break;
-                case 2:
+                case "2":
                     Console.WriteLine(friendList[1] + ": Hey there!");
-                    goBack();
+                    GoBack();
                     break;
-                case 3:
-                    Console.WriteLine(friendList[1] + ": likes to play games in my sparetime, and enjoys a cold shower after gym");
-                    goBack();
+                case "3":
+                    Console.WriteLine(friendList[1] + ": likes to play games in my spare time, and enjoys a cold shower after gym");
+                    GoBack();
                     break;
             }
-            void goBack()
+            static void GoBack()
             {
                 Console.WriteLine("press a key to go back");
                 Console.ReadKey();
-                showFriendInfo();
+                ShowFriendInfo();
             }
 
         }
