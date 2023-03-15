@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using static M3_SocialMedia_App.FriendFace;
 
-namespace UserPromt
+namespace M3_SocialMedia_App
 {
-    public static class UserPromts
+    public abstract class UserPromts
     {
-        public static string AskName(string question)
+        public static string? AskName(string question)
         {
             Console.WriteLine(question);
             return Console.ReadLine();
         }
 
-        public static string PrintAction()
+        public static string? PrintAction()
         {
             Console.WriteLine("1: Add Friend");
             Console.WriteLine("2: Remove Friend");
@@ -29,15 +25,23 @@ namespace UserPromt
 
         }
 
-        public static string AddFriendPromt()
+        public static string? AddFriendPromt()
         {
             Console.WriteLine("What is your friend's name? ");
+            Console.WriteLine("Enter empty value to cancel");
             return Console.ReadLine();
         }
 
-        public static string FriendAddedPromt(string Name)
+        public static void cancelAddFriend()
         {
-            Console.WriteLine(Name + " is added in your friend list.");
+            Console.WriteLine("cancelled action");
+            Console.WriteLine("press any key to continue");
+            ActionPromt();
+        }
+
+        public static string? FriendAddedPromt(string name)
+        {
+            Console.WriteLine(name + " is added in your friend list.");
             Console.WriteLine();
             Console.WriteLine("Do you want to find a new friend y/n");
 
@@ -48,26 +52,26 @@ namespace UserPromt
         {
             Console.WriteLine("Input the person you want to remove");
             Console.WriteLine("n for cancel");
-            string removeFriendInput = Console.ReadLine();
+            var removeFriendInput = Console.ReadLine();
 
-            if (removeFriendInput == "n") actionPromt();
+            if (removeFriendInput is "n" or "N") ActionPromt();
 
-            int friendIndex = Convert.ToInt32(removeFriendInput);
-            friendList.RemoveAt(friendIndex);
+            var friendIndex = Convert.ToInt32(removeFriendInput);
+            FriendList.RemoveAt(friendIndex);
 
-            Console.WriteLine(friendList[friendIndex] + " har blitt fjernet fra listen.");
+            Console.WriteLine(FriendList[friendIndex] + " har blitt fjernet fra listen.");
             Console.WriteLine("press any button to continue.");
             Console.ReadLine();
 
-            actionPromt();
+            ActionPromt();
         }
 
         public static void ShowFriendsPromt()
         {
             Console.WriteLine("Return to main 'n'");
-            string continueInput = Console.ReadLine();
+            var continueInput = Console.ReadLine();
 
-            if (continueInput == "n" || continueInput == "N") actionPromt();
+            if (continueInput is "n" or "N") ActionPromt();
         }
 
     }

@@ -1,32 +1,32 @@
 ﻿
-using static UserPromt.UserPromts;
+using static M3_SocialMedia_App.UserPromts;
 
 namespace M3_SocialMedia_App
 {
     public class FriendFace
     {
-        static string username = "";
+        private static string _username = "";
 
 
-        public static List<string> friendList = new List<string>();
+        public static List<string?> FriendList = new List<string?>();
 
 
         public static void LoginPromt()
         {
-            username = AskName("Enter your name to login to FriendFace.");
-            Console.WriteLine("Welcome to FriendFace " + username);
+            _username = AskName("Enter your name to login to FriendFace.");
+            Console.WriteLine("Welcome to FriendFace " + _username);
 
-            actionPromt();
+            ActionPromt();
         }
 
-        public static void actionPromt()
+        public static void ActionPromt()
         {
             var actionPromtInput = PrintAction();
 
             ActionHandler(actionPromtInput);
         }
 
-        static void ActionHandler(string userInput)
+        static void ActionHandler(string? userInput)
         {
             switch (userInput)
             {
@@ -46,36 +46,41 @@ namespace M3_SocialMedia_App
                     break;
                 default:
                     Console.WriteLine("invalid input, try again!");
-                    actionPromt();
+                    ActionPromt();
                     break;
             }
         }
 
         private static void AddFriend()
         {
-            string userFriendInput = AddFriendPromt();
+            string? userFriendInput = AddFriendPromt();
 
-            friendList.Add(userFriendInput);
+            if (userFriendInput != null)
+            {
+                cancelAddFriend();
+            }
 
-            string continueCheck = FriendAddedPromt(userFriendInput);
+            FriendList.Add(userFriendInput);
 
-            if (continueCheck == "y" || continueCheck == "Y") AddFriend();
+            string? continueCheck = FriendAddedPromt(userFriendInput);
 
-            actionPromt();
+            if (continueCheck is "y" or "Y") AddFriend();
+
+            ActionPromt();
         }
 
         private static void RemoveFriend()
         {
-            if (friendList.Count == 0)
+            if (FriendList.Count == 0)
             {
                 Console.WriteLine("There are no more people in your friendList to remove");
                 Console.ReadLine();
-                actionPromt();
+                ActionPromt();
             }
 
             Console.WriteLine("Who do you want to remove:");
             var i = 0;
-            foreach (var friend in friendList)
+            foreach (var friend in FriendList)
             {
                 Console.WriteLine(i + ": " + friend);
                 i++;
@@ -86,7 +91,7 @@ namespace M3_SocialMedia_App
         private static void ShowFriendList()
         {
             var i = 0;
-            foreach (var friend in friendList)
+            foreach (var friend in FriendList)
             {
                 Console.WriteLine(i + ": " + friend);
                 i += 1;
@@ -97,18 +102,18 @@ namespace M3_SocialMedia_App
 
         private static void ShowFriendInfo()
         {
-            if (friendList.Count == 0)
+            if (FriendList.Count == 0)
             {
                 Console.WriteLine("There are no friends in you friendList");
                 Console.WriteLine("Press any Key to continue!");
                 Console.ReadLine();
-                actionPromt();
+                ActionPromt();
             }
 
             Console.WriteLine("Which person do you want to inspect?");
 
             var i = 0;
-            foreach (var friend in friendList)
+            foreach (var friend in FriendList)
             {
                 Console.WriteLine(i + ": " + friend);
                 i++;
@@ -116,25 +121,25 @@ namespace M3_SocialMedia_App
 
             Console.WriteLine("or go back with 'n'");
 
-            string userInput = Console.ReadLine();
-            if (userInput == "n" || userInput == "N") actionPromt();
+            var userInput = Console.ReadLine();
+            if (userInput is "n" or "N") ActionPromt();
 
             switch (userInput)
             {
                 case "0":
-                    Console.WriteLine(friendList[0] + ": lover of sports and like to take a beer in the pub when im feeling for it.");
+                    Console.WriteLine(FriendList[0] + ": lover of sports and like to take a beer in the pub when im feeling for it.");
                     GoBack();
                     break;
                 case "1":
-                    Console.WriteLine(friendList[1] + ": You will see the fragments when i explode");
+                    Console.WriteLine(FriendList[1] + ": You will see the fragments when i explode");
                     GoBack();
                     break;
                 case "2":
-                    Console.WriteLine(friendList[1] + ": Hey there!");
+                    Console.WriteLine(FriendList[1] + ": Hey there!");
                     GoBack();
                     break;
                 case "3":
-                    Console.WriteLine(friendList[1] + ": likes to play games in my spare time, and enjoys a cold shower after gym");
+                    Console.WriteLine(FriendList[1] + ": likes to play games in my spare time, and enjoys a cold shower after gym");
                     GoBack();
                     break;
             }
